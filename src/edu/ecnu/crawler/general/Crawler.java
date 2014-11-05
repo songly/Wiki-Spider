@@ -73,6 +73,10 @@ public class Crawler {
         }
     }
 
+    public void setUrlnoCheck(String url) {
+        mUrl = url;
+    }
+
     public String getUrl() {
         return mUrl;
     }

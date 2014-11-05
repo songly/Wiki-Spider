@@ -1,8 +1,6 @@
 package edu.ecnu.crawler.general;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.regex.Matcher;
 
 public class Recorder {
@@ -12,12 +10,17 @@ public class Recorder {
 
     public Recorder() {
         mPath = this.formatPath(defaultPath);
-        mFile = this.createFile(mPath);
+        mFile = this.createFile(mPath, true);
     }
 
     public Recorder(String path) {
         mPath = this.formatPath(path);
-        mFile = this.createFile(mPath);
+        mFile = this.createFile(mPath, true);
+    }
+
+    public Recorder(String path, boolean coverage) {
+        mPath = this.formatPath(path);
+        mFile = this.createFile(mPath, coverage);
     }
 
     protected String formatPath(String path) {
@@ -40,7 +43,7 @@ public class Recorder {
         return mFile;
     }
 
-    protected File createFile(String path) {
+    protected File createFile(String path, boolean coverage) {
         path = this.formatPath(path);
         File file = null;
         try {
@@ -49,16 +52,39 @@ public class Recorder {
                 file.mkdirs();
             }
             file = new File(path);
-            file.createNewFile();
+            if (!file.exists())
+                file.createNewFile();
+            else if (coverage) {
+                file.renameTo(new File(rename(file.getCanonicalPath())));
+                file.createNewFile();
+            }
         } catch (Exception e) {
             System.out.print(e.getMessage());
         }
         return file;
     }
 
+    protected String rename(String fileName) {
+        if (fileName.contains(".")) {
+            int dot = fileName.lastIndexOf(".");
+            fileName = fileName.substring(0, dot) + System.currentTimeMillis() + fileName.substring(dot);
+        }
+        return fileName;
+    }
+
+    public void writeRecordUTF8(String message) {
+        try {
+            Writer out = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(mFile, true), "UTF-8")));
+            out.write(message);
+            out.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void writeRecord(String message) {
         try {
-            Writer out = new FileWriter(mFile, true);
+            Writer out = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(mFile, true), "UTF-8")));
             out.write(message);
             out.close();
         } catch (Exception e) {
@@ -68,7 +94,7 @@ public class Recorder {
 
     public void writeRecord(String message, Boolean coverage) {
         try {
-            Writer out = new FileWriter(mFile, !coverage);
+            Writer out = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(mFile, !coverage), "UTF-8")));
             out.write(message);
             out.close();
         } catch (Exception e) {

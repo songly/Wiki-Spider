@@ -1,8 +1,6 @@
 package edu.ecnu.crawler.general;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
 
 
 public class XMLRecorder extends Recorder {
@@ -29,9 +27,7 @@ public class XMLRecorder extends Recorder {
 
     public void writeEnd() {
         try {
-            Writer out = new FileWriter(mFile, true);
-            out.write("</" + mKeyWord + ">" + "\r\n");
-            out.close();
+            writeRecordUTF8("</" + mKeyWord + ">" + "\r\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,11 +35,13 @@ public class XMLRecorder extends Recorder {
 
     private void writeHead() {
         try {
-            Writer out = new FileWriter(mFile);
-            out.write("<?xml version=\"1.0\" encoding=\"GBK\"?>" + "\r\n"
-                    + "<!DOCTYPE " + mKeyWord + " SYSTEM \"" + mKeyWord + ".dtd\">"
-                    + "\r\n" + "<" + mKeyWord + ">" + "\r\n");
-            out.close();
+            writeRecordUTF8("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\r\n"
+                    + "<" + mKeyWord + ">" + "\r\n");
+//            Writer out = new FileWriter(mFile);
+//            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\r\n"
+//                    + "<!DOCTYPE " + mKeyWord + " SYSTEM \"" + mKeyWord + ".dtd\">"
+//                    + "\r\n" + "<" + mKeyWord + ">" + "\r\n");
+//            out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

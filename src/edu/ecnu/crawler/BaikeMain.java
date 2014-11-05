@@ -1,6 +1,6 @@
 package edu.ecnu.crawler;
 
-import edu.ecnu.crawler.netease.PageContents;
+import edu.ecnu.crawler.jobs.BaikeCrawlJob;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -17,7 +17,7 @@ public class BaikeMain {
         }
         int start = Integer.valueOf(args[0]);
         int end = Integer.valueOf(args[1]);
-        PageContents pages = new PageContents("." + File.separator + "baikeinfo" + File.separator);
+        BaikeCrawlJob pages = new BaikeCrawlJob("." + File.separator + "baikeinfo" + File.separator);
         try {
             pages.doCrawl(start, end);
         } catch (Exception e) {
