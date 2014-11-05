@@ -48,9 +48,9 @@ public class HudongCrawlJob {
         return true;
     }
 
-    public void doCrawl(int start, int end) {
+    public void doCrawl(int start, int end, String dict) {
         Crawler crawler = new Crawler();
-        initialize();
+        initialize(dict);
 
         count = start;
         Recorder mBreakpoint = new Recorder(mPath + "breakpoint", false);
@@ -112,11 +112,13 @@ public class HudongCrawlJob {
         }
     }
 
-    private void initialize() {
+    private void initialize(String dicFile) {
         crawledURL = Lists.newArrayList();
+
         Scanner scanner;
         try {
-            scanner = new Scanner(new File("hudong/hudong.dic"));
+            scanner = new Scanner(new File(dicFile));
+            System.out.println("Read Dictionary File:" + dicFile);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] items = line.split("\t");
@@ -150,7 +152,6 @@ public class HudongCrawlJob {
         }
 
         try {
-            String word = url.replace("http://www.baike.com/wiki/", "");
             writeTxt(content, filename + ".htm");
         } catch (IOException e) {
             mErrorRecorder.writeRecord("write to file error");

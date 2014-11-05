@@ -13,15 +13,15 @@ public class HudongMain {
     private static Logger logger = Logger.getLogger(BaikeMain.class.getName());
 
     public static void main(String[] args) {
-        if (args.length < 2) {
-            System.out.println("Need arguments: start ID, end ID");
+        if (args.length < 3) {
+            System.out.println("Need arguments: start ID, end ID, dictionary file path");
             return;
         }
         int start = Integer.valueOf(args[0]);
         int end = Integer.valueOf(args[1]);
         HudongCrawlJob pages = new HudongCrawlJob("." + File.separator + "hudonginfo" + File.separator);
         try {
-            pages.doCrawl(start, end);
+            pages.doCrawl(start, end, args[2]);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Spider Crashes!", e);
         }
